@@ -18,6 +18,7 @@ fn main() {
     println!("{:?}", s_last);
 }
 
+// 標準入力をベクタに取り込むための関数
 fn read_line<T>(err: &str) -> Vec<T>
 where
     T: FromStr,

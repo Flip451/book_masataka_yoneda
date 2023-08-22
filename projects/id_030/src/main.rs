@@ -62,6 +62,7 @@ fn main() {
     println!("{:?}", dp[n].iter().max().unwrap().unwrap());
 }
 
+// 標準入力をベクタに取り込むための関数
 fn read_line<T>(err: &str) -> Vec<T>
 where
     T: FromStr,
