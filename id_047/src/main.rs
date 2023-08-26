@@ -9,45 +9,35 @@ fn main() {
     (1..=n).for_each(|i| {
         nodes.insert(Node(i), vec![]);
     });
-    let edges = (1..=m).map(|i| {
-        let ab = read_line::<usize>(&format!("Error at reading A_{0}, B_{0}", i));
-        let (a, b) = (ab[0], ab[1]);
-        let handle_a = nodes.entry(Node(a)).or_insert(vec![]);
-        handle_a.push(Node(b));
-        let handle_b = nodes.entry(Node(b)).or_insert(vec![]);
-        handle_b.push(Node(a));
-        (Node(a), Node(b))
-    }).collect::<Vec<(Node, Node)>>();
+    let edges = (1..=m)
+        .map(|i| {
+            let ab = read_line::<usize>(&format!("Error at reading A_{0}, B_{0}", i));
+            let (a, b) = (ab[0], ab[1]);
+            let handle_a = nodes.entry(Node(a)).or_insert(vec![]);
+            handle_a.push(Node(b));
+            let handle_b = nodes.entry(Node(b)).or_insert(vec![]);
+            handle_b.push(Node(a));
+            (Node(a), Node(b))
+        })
+        .collect::<Vec<(Node, Node)>>();
 
     let mut colors = HashMap::<Node, bool>::new();
-    loop {
-        let start_node = nodes.keys().find(|node| {
-            let color = colors.get(node);
-            match color {
-                Some(_) => {
-                    false
-                }
-                None => {
-                    true
-                }
-            }
-        });
-        match start_node {
-            Some(&start_node) => {
-                dfs(start_node, &nodes, &mut colors, true);
-            }
-            None => {
-                break;
-            }
+    for start_node in nodes.keys() {
+        if let None = colors.get(start_node) {
+            dfs(*start_node, &nodes, &mut colors, true);
         }
     }
 
     // println!("{:?}", colors);
-    
+
     let mut output = "Yes";
     edges.iter().for_each(|(n1, n2)| {
-        let color1 = colors.get(n1).expect("色が割り振られていないノードがあるようです");
-        let color2 = colors.get(n2).expect("色が割り振られていないノードがあるようです");
+        let color1 = colors
+            .get(n1)
+            .expect("色が割り振られていないノードがあるようです");
+        let color2 = colors
+            .get(n2)
+            .expect("色が割り振られていないノードがあるようです");
         if color1 == color2 {
             output = "No";
         }
